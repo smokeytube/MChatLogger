@@ -17,28 +17,42 @@ def follow(thefile):
 logfile = open(os.getenv("APPDATA")+"/.minecraft/logs/latest.log", "r")
 loglines = follow(logfile)
 
+cwd = os.getcwd()
+
+try:
+    filelog = open(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+except FileNotFoundError:
+    os.makedirs(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/')
+    filelog = open(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+except:
+    ctypes.windll.user32.MessageBoxW(0, u"An unexpected error occured. Reporting problem to mircosoft", u"what", 0)
+
+
 x = 1
 for line in loglines:
     print (line)
 
 
-    if not os.path.exists(datetime.today().year):
-        os.makedirs(datetime.today().year)
-    if not os.path.exists(datetime.today().month):
-        os.makedirs(datetime.today().month)
-    if not os.path.exists(datetime.today().day):
-        os.makedirs(datetime.today().day)
-    try:
-        filelog = open(f'/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
-    except:
-        filelog = open(f'/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+    # if not os.path.exists(datetime.today().year):
+    #     os.makedirs(datetime.today().year)
+    # if not os.path.exists(datetime.today().month):
+    #     os.makedirs(datetime.today().month)
+    # if not os.path.exists(datetime.today().day):
+    #     os.makedirs(datetime.today().day)
+
 
     if '[main/INFO]: [CHAT] ' in line:
         filelog.write(line.split('[main/INFO]: [CHAT] ')[1])
 
-    if x > 50:
+    if x > 10:
         filelog.close()
-        filelog = open('log.txt', 'a+')
+        try:
+            filelog = open(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+        except FileNotFoundError:
+            os.makedirs(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/')
+            filelog = open(f'{cwd}/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+        except:
+            ctypes.windll.user32.MessageBoxW(0, u"An unexpected error occured. Reporting problem to mircosoft", u"what", 0)
         x = 1
     else:
         x += 1
