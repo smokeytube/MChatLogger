@@ -1,8 +1,8 @@
 import os
 import time
-import sqlite3
 from datetime import datetime, date
 import time
+import ctypes
 
 def follow(thefile):
     thefile.seek(0,2)
@@ -16,35 +16,39 @@ def follow(thefile):
 
 logfile = open(os.getenv("APPDATA")+"/.minecraft/logs/latest.log", "r")
 loglines = follow(logfile)
+
 x = 1
 for line in loglines:
     print (line)
-    now = datetime.now()
-    current_time = now.strftime("%H_%M")
 
-    today = date.today()
 
-    conn = sqlite3.connect(f'log{today}.db')
+    if not os.path.exists(datetime.today().year):
+        os.makedirs(datetime.today().year)
+    if not os.path.exists(datetime.today().month):
+        os.makedirs(datetime.today().month)
+    if not os.path.exists(datetime.today().day):
+        os.makedirs(datetime.today().day)
+    try:
+        filelog = open(f'/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
+    except:
+        filelog = open(f'/{datetime.today().year}/{datetime.today().month}/{datetime.today().day}/log.txt', 'a+')
 
-    c= conn.cursor()
+    if '[main/INFO]: [CHAT] ' in line:
+        filelog.write(line.split('[main/INFO]: [CHAT] ')[1])
 
-    if x == 1:
-        try:
-            c.execute(f"""CREATE TABLE log{current_time} (
-                        playername text,
-                        message text,
-                        other text,
-                        timestamp text
-                )""")
-            x = x+1
-        except:
-            pass
+    if x > 50:
+        filelog.close()
+        filelog = open('log.txt', 'a+')
+        x = 1
+    else:
+        x += 1
 
-    c.execute(f"INSERT INTO log{current_time} VALUES ({line.split(']')[2]}, 'i am popbob', '', 'hi')")
-    c.execute(f"SELECT * FROM log{current_time}")
+    # now = datetime.now()
+    # current_time = now.strftime("%H:%M")
 
-    print(c.fetchall())
+    # now = datetime.now()
+    # current_timeHR = now.strftime("%H")
 
-    conn.commit()
+    # today = date.today()
 
-    conn.close()
+    # dayofweek = datetime.today().strftime('%A')
