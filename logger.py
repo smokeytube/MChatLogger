@@ -34,15 +34,6 @@ x = 1
 for line in loglines:
     print (line)
 
-
-    # if not os.path.exists(datetime.today().year):
-    #     os.makedirs(datetime.today().year)
-    # if not os.path.exists(datetime.today().month):
-    #     os.makedirs(datetime.today().month)
-    # if not os.path.exists(datetime.today().day):
-    #     os.makedirs(datetime.today().day)
-
-
     if '[main/INFO]: [CHAT] ' in line:
         filelog.write(line.split('[main/INFO]: [CHAT] ')[1])
 
