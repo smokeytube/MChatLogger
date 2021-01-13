@@ -49,13 +49,3 @@ for line in loglines:
         x = 1
     else:
         x += 1
-
-    # now = datetime.now()
-    # current_time = datetime.now().strftime("%H-%M")
-
-    # now = datetime.now()
-    # current_timeHR = now.strftime("%H")
-
-    # today = date.today()
-
-    # dayofweek = datetime.today().strftime('%A')
